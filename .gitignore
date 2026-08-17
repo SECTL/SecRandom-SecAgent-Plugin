@@ -1,0 +1,8 @@
+bin/
+obj/
+srpx/
+srpx-package/
+.vs/
+.idea/
+*.user
+*.suo
