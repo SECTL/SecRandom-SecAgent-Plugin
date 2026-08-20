@@ -5,18 +5,14 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <EnableDynamicLoading>true</EnableDynamicLoading>
         <CreateSrpx>true</CreateSrpx>
-        <UseLocalPluginSdk Condition="'$(UseLocalPluginSdk)' == ''">false</UseLocalPluginSdk>
+        <!-- alpha.2 has a different Core/Shared ABI from the current SecRandom host. -->
+        <UseLocalPluginSdk Condition="'$(UseLocalPluginSdk)' == ''">true</UseLocalPluginSdk>
         <LocalSecRandomRoot Condition="'$(LocalSecRandomRoot)' == ''">..\..\SecRandom-remove-secagent</LocalSecRandomRoot>
     </PropertyGroup>
 
-    <ItemGroup Condition="'$(UseLocalPluginSdk)' != 'true'">
-        <PackageReference Include="SecRandom.PluginSdk" Version="3.0.0-alpha.2">
-            <ExcludeAssets>runtime;native</ExcludeAssets>
-        </PackageReference>
-    </ItemGroup>
-
     <ItemGroup Condition="'$(UseLocalPluginSdk)' == 'true'">
-        <ProjectReference Include="$(LocalSecRandomRoot)\SecRandom.PluginSdk\SecRandom.PluginSdk.csproj" />
+        <ProjectReference Include="$(LocalSecRandomRoot)\SecRandom.PluginSdk\SecRandom.PluginSdk.csproj"
+                          GlobalPropertiesToRemove="CreateSrpx" />
     </ItemGroup>
 
     <ItemGroup>
@@ -33,4 +29,9 @@
 
     <Import Project="$(LocalSecRandomRoot)\SecRandom.PluginSdk\SecRandom.PluginSdk.targets"
             Condition="'$(UseLocalPluginSdk)' == 'true' and Exists('$(LocalSecRandomRoot)\SecRandom.PluginSdk\SecRandom.PluginSdk.targets')" />
+
+    <Target Name="RequireCompatiblePluginSdk" BeforeTargets="PrepareForBuild"
+            Condition="'$(UseLocalPluginSdk)' != 'true'">
+        <Error Text="Build this plugin against the matching SecRandom source with -p:UseLocalPluginSdk=true -p:LocalSecRandomRoot=&lt;path-to-SecRandom&gt;. SecRandom.PluginSdk 3.0.0-alpha.2 is ABI-incompatible with the host." />
+    </Target>
 </Project>

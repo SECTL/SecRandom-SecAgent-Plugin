@@ -16,6 +16,10 @@ The plugin is packaged as `srpx/SecRandom.SecAgentPlugin.srpx`.
 dotnet build -c Release -p:CreateSrpx=true
 ```
 
-The published build uses `SecRandom.PluginSdk` `3.0.0-alpha.2`. For a checkout that also contains the SecRandom host source, use `-p:UseLocalPluginSdk=true -p:LocalSecRandomRoot=<path-to-SecRandom>`.
+Build against the matching SecRandom host source on the `agent/extract-secagent-plugin` branch. `SecRandom.PluginSdk` `3.0.0-alpha.2` is ABI-incompatible with that host and must not be used.
+
+```powershell
+dotnet build -c Release -p:CreateSrpx=true -p:UseLocalPluginSdk=true -p:LocalSecRandomRoot=<path-to-SecRandom>
+```
 
 Copy the generated SRPX package into SecRandom's `data/cache/plugin-packages` directory and restart SecRandom.

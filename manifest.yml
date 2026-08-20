@@ -3,5 +3,5 @@ name: SecRandom SecAgent 集成
 description: 为 SecRandom 提供 SecAgent 本地连接器接口。
 entranceAssembly: SecRandom.SecAgentPlugin.dll
 apiVersion: 3.0.0
-version: 1.0.0
+version: 1.0.1
 author: SECTL
